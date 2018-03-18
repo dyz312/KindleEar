@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.10'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.11'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -70,6 +70,7 @@ class Zgjjjcb(BaseFeedBook):
             for link in ul.findAll('a'):
                 til = self.tag_to_string(link)
                 url = self.mainurl + link['href']
+                self.log.warn('href为：%s'%url)
                 urls.append((vol_title,til,url,None))
                 urladded.add(url)
 
