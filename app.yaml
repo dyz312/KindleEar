@@ -1,4 +1,4 @@
-application: kindleear
+application: dyzkindleear1
 version: 1
 runtime: python27
 api_version: 1
@@ -14,7 +14,7 @@ instance_class: F1
 libraries:
 - name: lxml
   version: "latest"
-  
+
 - name: PIL
   version: "latest"
 
@@ -43,7 +43,6 @@ handlers:
 
 - url: /_ah/mail/.+
   script: apps.handlemail.appmail
-  
+
 - url: /.*
   script: apps.module_front.app
-  
