@@ -1,66 +1,99 @@
 #!/usr/bin/env python
-# -*- coding:utf-8
+# -*- coding:utf-8 -*-
 from bs4 import BeautifulSoup
 from base import BaseFeedBook, URLOpener, string_of_tag
-from calibre.web.feeds.recipes import BasicNewsRecipe
-# import datetime,re
+import datetime,re
 
 def getBook():
-    return Zgjjjcb
+    return YonhapNK
+
 
 class Zgjjjcb(BaseFeedBook):
-    title               = u'中国纪检监察报'
-    description         = u'中央纪委监察部的机关报 | 版本0.2.4'
-    language            = 'zh-cn'
-    feed_encoding       = "utf-8"
-    page_encoding       = "utf-8"
-    mastheadfile        = "mh_gongshi.gif"
-    coverfile           = 'cv_zgjjjcb.jpg'
-    deliver_days        = []
+    title                 =  u'中国纪检监察报'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3'
+    language              = 'zh'
+    feed_encoding         = "utf-8"
+    page_encoding         = "utf-8"
+    mastheadfile          = "mh_economist.gif"
+    coverfile             = "cv_zgjjjcb.jpg"
+    oldest_article        = 1
+    fulltext_by_readability = False
+    keep_image            =  True
+    extra_css      = '''
+        p { font-size: 1em; font-weight: 600;  text-align: justify;  line-height: 1.5 }
+        h1 { font-size: large  }
+        '''
+    keep_only_tags = [
+#                      dict(name='h1'),
+#                      dict(id='articleWrap'),
+#                      dict(attrs={'class':['article-wrap article-wrap2 article-font3','article-wrap']})
+#                       dict(name='div', attrs={'itemprop':['articleBody']})
+#                      dict(id='article-body-blocks')
+                     { 'class': 'content' }
+                     ]
+#    remove_classes = ['share-info','link-info','article-ad-box','adrs','article-sns-md','cprgt','pblsh','article-sns-md sns-md03',
+#                      'img-info','banner-0-wrap','blind'
+#                     ]
+    remove_tags_after = [ {'class' : 'title04'}
+#    dict(attrs={'class':[
+#            'pblsh'
+#    ]})
+    ]
 
-    no_stylesheets = True #不采用页面样式表
-    keep_only_tags = [{ 'class': 'content' }] #保留的正文部分
-    remove_tags = [{'class' : 'title04'}]
 
+    def ParseFeedUrls(self):
+        #return lists like [(section,title,url,desc),..]
+        datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
+        # main = 'http://csr.mos.gov.cn/content/1/'
+        mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
+        #mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' + 'node_2.htm' #头版完整url
+        urls = []
+        urladded = set()
+        opener = URLOpener(self.host, timeout=90)
+        result = opener.open(mainurl + 'node_2.htm')
+        if result.status_code != 200:
+            self.log.warn('fetch mainnews failed:%s'%main)
 
-    mainurl_add = 'http://csr.mos.gov.cn/content/2018-03/17/'
-    mainurl_add2 = 'http://csr.mos.gov.cn/content/2018-03/17/node_2.htm'
-    #datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
+        content = result.content.decode(self.page_encoding)
+        soup = BeautifulSoup(content, "lxml")
 
-      def ParseFeedUrls(self):
-        """ return list like [(section,title,url,desc),..] """
-        # mainurl = 'http://csr.mos.gov.cn/'
-        #mainurl = 'http://csr.mos.gov.cn/content/' #url前缀
-        #mainurl_add = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
-        #mainurl_add2 = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' + 'node_2.htm' #头版完整url
-
-
-        soup = self.index_to_soup(self.mainurl_add2)
-        banmianmulu = soup.find('td',{'class':'mulu04'}) #可以有多个属性，比如'table',{'cellpadding':'2','width':'100%'}
-
-        ans0 = []
-        #下面的for循环用soupfind找到各版面的url并生成列表，带pdf的链接抛弃
-        for link in banmianmulu.find_all('a'):
-            articles = []
+        #开始解析
+        mulu = soup.find('td',{'class':'mulu04'})
+        for banmian in mulu.find_all('a'):
             if 'pdf' in link['href']:
                 continue
-            soup = self.index_to_soup(self.mainurl_add + link['href'])
-            vol_title = link.contents[0].strip()
-            ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
+                soup = self.index_to_soup(self.mainurl + link['href'])
+                vol_title = link.contents[0].strip()
+                ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
-            for link in ul.findAll('a'):
-                videolink = re.compile(r'src="')
-                vlinkfind = videolink.find_all(str(link))
-
-                if not vlinkfind:
+                for link in ul.findAll('a'):
                     til = self.tag_to_string(link)
-                    url = self.mainurl_add + link['href']
-            #        a = { 'title':til , 'url': url }
+                    url = self.mainurl + link['href']
+                    urls.append((vol_title,til,url,None))
+                    urladded.add(url)
 
-            #        articles.append(a)
-
-            ans = (vol_title, til, url, None)
-
-            ans0.append(ans)
-
-        return ans0
+        if len(urls) == 0:
+            self.log.warn('len of urls is zero.')
+        return urls
+'''
+        part2 = 'http://www.yonhapnews.co.kr/nk/4807080001.html'
+        opener2 = URLOpener(self.host, timeout=90)
+        result2 = opener2.open(part2)
+        if result2.status_code != 200:
+            self.log.warn('fetch latest news failed:%s'%main)
+        content2 = result2.content.decode(self.page_encoding)
+        soup2 = BeautifulSoup(content2, "lxml")
+        sect = soup2.find('ul', attrs={'class':'list-type01'})
+        for arti in sect.find_all('article'):
+            h = arti.find('h2')
+            a2 = h.find('a', href=True)
+            title = string_of_tag(a2).strip()
+            if u'[북한날씨]' in title:
+                continue
+            aurl = a2['href']
+            if aurl.startswith('HTTP'):
+                aurl=aurl.replace('HTTP','http')
+            if aurl not in urladded:
+                urls.append((u'朝鲜最新消息',title,aurl,None))
+                urladded.add(aurl)
+        '''
