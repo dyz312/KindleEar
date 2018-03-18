@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 from bs4 import BeautifulSoup
 from base import BaseFeedBook, URLOpener, string_of_tag
-import datetime,re
+import re
+import datetime
 
 def getBook():
     return Zgjjjcb
@@ -17,8 +18,8 @@ class Zgjjjcb(BaseFeedBook):
     mastheadfile          = "mh_economist.gif"
     coverfile             = "cv_zgjjjcb.jpg"
     oldest_article        = 1
-    fulltext_by_readability = False
-    keep_image            =  True
+    # fulltext_by_readability = False
+    # keep_image            =  True
     extra_css      = '''
         p { font-size: 1em; font-weight: 600;  text-align: justify;  line-height: 1.5 }
         h1 { font-size: large  }
