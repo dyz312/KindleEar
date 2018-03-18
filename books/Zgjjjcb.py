@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.11'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.12'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -34,8 +34,8 @@ class Zgjjjcb(BaseFeedBook):
 
     def wenzhang_to_soup(self, indexurl):
         wenzhangopener = URLOpener(self.host, timeout=90)
-        wenzhangresult = opener.open(indexurl)
-        if soup_result.status_code != 200:
+        soupresult = wenzhangopener.open(indexurl)
+        if soupresult.status_code != 200:
             self.log.warn('fetch mainnews failed:%s'%indexurl)
 
         content = soupresult.content.decode(self.page_encoding)
