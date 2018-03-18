@@ -9,7 +9,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title               = u'中国纪检监察报'
-    description         = u'中央纪委监察部的机关报 | 版本0.2.1'
+    description         = u'中央纪委监察部的机关报 | 版本0.2.2'
     language            = 'zh-cn'
     feed_encoding       = "utf-8"
     page_encoding       = "utf-8"
@@ -17,11 +17,42 @@ class Zgjjjcb(BaseFeedBook):
     coverfile           = 'cv_zgjjjcb.jpg'
     deliver_days        = []
 
+    '''
     feeds = [
             ('Index', 'http://csr.mos.gov.cn/'),
            ]
+    '''
 
     #datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
+
+    def FetchDesc(self, url):
+        opener = URLOpener(self.host, timeout=60)
+        result = opener.open(url)
+        if result.status_code != 200:
+            self.log.warn('fetch article failed(%d):%s.' % (status_code, url))
+            return None
+        content = result.content.decode(self.feed_encoding)
+        soup = BeautifulSoup(content, 'lxml')
+        abstract = unicode(soup.find('div', attrs={'class': 'title01'}))
+        article = unicode(soup.find(id='contents'))
+        '''
+        pagelist = soup.find('ul', attrs={'class': 'pagelist'})
+        if pagelist and pagelist.find('li'):
+            page_count_context = pagelist.a.text
+            page_count = int(
+                page_count_context[1:page_count_context.index(u'页')])
+            for i in range(2, page_count + 1):
+                page_url = url[:-5] + "_%d.html" % i
+                result = opener.open(page_url)
+                if result.status_code != 200:
+                    self.log.warn(
+                        'fetch page failed(%d):%s.' % (status_code, page_url))
+                    return None
+                content = result.content.decode(self.feed_encoding)
+                pagesoup = BeautifulSoup(content, 'lxml')
+                article += unicode(pagesoup.find(id='contents'))
+        '''
+        return abstract + article
 
     def ParseFeedUrls(self):
         """ return list like [(section,title,url,desc),..] """
@@ -33,8 +64,8 @@ class Zgjjjcb(BaseFeedBook):
         mainurl_add = 'http://csr.mos.gov.cn/content/2018-03/17/'
         mainurl_add2 = 'http://csr.mos.gov.cn/content/2018-03/17/node_2.htm'
         urls = [] #保存返回的文章列表
-        urladded = set() #用于防止文章重复，不用也可以
-        opener = URLOpener(self.host)
+        # urladded = set() #用于防止文章重复，不用也可以
+        opener = URLOpener(self.host, timeout=60)
         result = opener.open(mainurl_add2) #下载页面
         if result.status_code != 200:
             self.log.warn('fetch rss failed:%s'%mainurl)
@@ -45,7 +76,7 @@ class Zgjjjcb(BaseFeedBook):
 
         banmianmulu = soup.find('td',{'class':'mulu04'})
 
-        for link in banmianmulu.find_all('a'):
+        for pagelink in banmianmulu.find_all('a', attrs={'id': ['pageLink']}):
             articles = []
             #if link is None:
             #    self.log.warn('link is empty')
@@ -58,14 +89,14 @@ class Zgjjjcb(BaseFeedBook):
             if 'pdf' in link['href']:
                 continue
 
-            soup = self.index_to_soup(self.mainurl_add + link['href'])
-            vol_title = link.contents[0].strip()
+            #soup = self.index_to_soup(self.mainurl_add + link['href'])
+            vol_title = pagelink.contents[0].strip()
             ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
             # subsection = ''
             for link in ul.find_all('a'):
                 title = self.tag_to_string(link)
                 url = self.mainurl_add + link['href']
-                urls.append((vol_title,title,url,None))
+                urls.append((vol_title,title,link.a['href'],self.FetchDesc(link.a['href']),None))
 
         return urls
