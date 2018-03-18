@@ -5,12 +5,12 @@ from base import BaseFeedBook, URLOpener, string_of_tag
 import datetime,re
 
 def getBook():
-    return YonhapNK
+    return Zgjjjcb
 
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.1'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -29,16 +29,15 @@ class Zgjjjcb(BaseFeedBook):
 #                      dict(attrs={'class':['article-wrap article-wrap2 article-font3','article-wrap']})
 #                       dict(name='div', attrs={'itemprop':['articleBody']})
 #                      dict(id='article-body-blocks')
-                     { 'class': 'content' }
+                     dict(class='content') }
                      ]
-#    remove_classes = ['share-info','link-info','article-ad-box','adrs','article-sns-md','cprgt','pblsh','article-sns-md sns-md03',
-#                      'img-info','banner-0-wrap','blind'
-#                     ]
-    remove_tags_after = [ {'class' : 'title04'}
+    remove_classes = [dict(class='title04')}
+                     ]
+    #remove_tags_after = [
 #    dict(attrs={'class':[
 #            'pblsh'
 #    ]})
-    ]
+#    ]
 
 
     def ParseFeedUrls(self):
