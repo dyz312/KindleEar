@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.5'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.6'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -44,7 +44,7 @@ class Zgjjjcb(BaseFeedBook):
         opener = URLOpener(self.host, timeout=90)
         result = opener.open(mainurl + 'node_2.htm')
         if result.status_code != 200:
-            self.log.warn('fetch mainnews failed:%s'%main)
+            self.log.warn('fetch mainnews failed:%s'%mainurl)
 
         content = result.content.decode(self.page_encoding)
         soup = BeautifulSoup(content, "lxml")
@@ -54,15 +54,15 @@ class Zgjjjcb(BaseFeedBook):
         for banmian in mulu.find_all('a'):
             if 'pdf' in banmian['href']:
                 continue
-                soup = self.index_to_soup(self.mainurl + banmian['href'])
-                vol_title = banmian.contents[0].strip()
-                ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
+            soup = self.index_to_soup(self.mainurl + banmian['href'])
+            vol_title = banmian.contents[0].strip()
+            ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
-                for link in ul.findAll('a'):
-                    til = self.tag_to_string(link)
-                    url = self.mainurl + link['href']
-                    urls.append((vol_title,til,url,None))
-                    urladded.add(url)
+            for link in ul.findAll('a'):
+                til = self.tag_to_string(link)
+                url = self.mainurl + link['href']
+                urls.append((vol_title,til,url,None))
+                urladded.add(url)
 
         if len(urls) == 0:
             self.log.warn('len of urls is zero.')
