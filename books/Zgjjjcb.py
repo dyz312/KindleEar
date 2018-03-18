@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.8'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.9'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -64,7 +64,7 @@ class Zgjjjcb(BaseFeedBook):
             vol_title = banmian.contents[0].strip()
             if 'pdf' in banmian['href']:
                 continue
-            wenzhang = self.wenzhang_to_soup(self.mainurl + banmian['href'])
+            wenzhang = self.wenzhang_to_soup(mainurl + banmian['href'])
             ul = wenzhang.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
             for link in ul.findAll('a'):
