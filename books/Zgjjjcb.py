@@ -2,14 +2,14 @@
 # -*- coding:utf-8
 from bs4 import BeautifulSoup
 from base import BaseFeedBook, URLOpener, string_of_tag
-import datetime,re
+# import datetime,re
 
 def getBook():
     return Zgjjjcb
 
 class Zgjjjcb(BaseFeedBook):
     title               = u'中国纪检监察报'
-    description         = u'中央纪委监察部的机关报 | 版本0.2'
+    description         = u'中央纪委监察部的机关报 | 版本0.2.1'
     language            = 'zh-cn'
     feed_encoding       = "utf-8"
     page_encoding       = "utf-8"
@@ -21,7 +21,7 @@ class Zgjjjcb(BaseFeedBook):
             ('Index', 'http://csr.mos.gov.cn/'),
            ]
 
-    datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
+    #datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
 
     def ParseFeedUrls(self):
         """ return list like [(section,title,url,desc),..] """
