@@ -9,7 +9,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title               = u'中国纪检监察报'
-    description         = u'中央纪委监察部的机关报 | 每天推送。'
+    description         = u'中央纪委监察部的机关报 | 版本0.2'
     language            = 'zh-cn'
     feed_encoding       = "utf-8"
     page_encoding       = "utf-8"
