@@ -33,14 +33,14 @@ class Zgjjjcb(BaseFeedBook):
 #    ]
 
     def wenzhang_to_soup(indexurl):
-        soupopener = URLOpener(self.host, timeout=90)
-        soupresult = opener.open(indexurl)
+        wenzhangopener = URLOpener(self.host, timeout=90)
+        wenzhangresult = opener.open(indexurl)
         if soup_result.status_code != 200:
             self.log.warn('fetch mainnews failed:%s'%indexurl)
 
         content = soupresult.content.decode(self.page_encoding)
-        soupindex = BeautifulSoup(content, "lxml")
-        return soupindex
+        wenzhangmulu = BeautifulSoup(content, "lxml")
+        return wenzhangmulu
 
     def ParseFeedUrls(self):
         #return lists like [(section,title,url,desc),..]
