@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.4'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.5'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -52,10 +52,10 @@ class Zgjjjcb(BaseFeedBook):
         #开始解析
         mulu = soup.find('td',{'class':'mulu04'})
         for banmian in mulu.find_all('a'):
-            if 'pdf' in link['href']:
+            if 'pdf' in banmian['href']:
                 continue
-                soup = self.index_to_soup(self.mainurl + link['href'])
-                vol_title = link.contents[0].strip()
+                soup = self.index_to_soup(self.mainurl + banmian['href'])
+                vol_title = banmian.contents[0].strip()
                 ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
                 for link in ul.findAll('a'):
