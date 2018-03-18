@@ -11,7 +11,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.6'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.7'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -32,6 +32,15 @@ class Zgjjjcb(BaseFeedBook):
 #    ]})
 #    ]
 
+    def wenzhang_to_soup(indexurl):
+        soupopener = URLOpener(self.host, timeout=90)
+        soupresult = opener.open(indexurl)
+        if soup_result.status_code != 200:
+            self.log.warn('fetch mainnews failed:%s'%indexurl)
+
+        content = soupresult.content.decode(self.page_encoding)
+        soupindex = BeautifulSoup(content, "lxml")
+        return soupindex
 
     def ParseFeedUrls(self):
         #return lists like [(section,title,url,desc),..]
@@ -52,11 +61,11 @@ class Zgjjjcb(BaseFeedBook):
         #开始解析
         mulu = soup.find('td',{'class':'mulu04'})
         for banmian in mulu.find_all('a'):
+            vol_title = banmian.contents[0].strip()
             if 'pdf' in banmian['href']:
                 continue
-            soup = self.index_to_soup(self.mainurl + banmian['href'])
-            vol_title = banmian.contents[0].strip()
-            ul = soup.find('ul',{'class':'list01'})#抓取的正文链接框架部分
+            wenzhang = wenzhang_to_soup(self.mainurl + banmian['href'])
+            ul = wenzhang.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
             for link in ul.findAll('a'):
                 til = self.tag_to_string(link)
