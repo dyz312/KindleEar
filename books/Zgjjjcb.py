@@ -10,7 +10,7 @@ def getBook():
 
 class Zgjjjcb(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.1'
+    description           =  u'中央纪委监察报机关报纸|ver:0.3.0.2'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -29,9 +29,9 @@ class Zgjjjcb(BaseFeedBook):
 #                      dict(attrs={'class':['article-wrap article-wrap2 article-font3','article-wrap']})
 #                       dict(name='div', attrs={'itemprop':['articleBody']})
 #                      dict(id='article-body-blocks')
-                     dict(class='content') }
+                     dict(attrs={'class':'content'}) }
                      ]
-    remove_classes = [dict(class='title04')}
+    remove_classes = [dict(attrs={'class':'title04'})}
                      ]
     #remove_tags_after = [
 #    dict(attrs={'class':[
