@@ -11,7 +11,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.4.4.6'
+    description           =  u'中央纪委监察报机关报纸|ver:0.4.4.7'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -76,13 +76,13 @@ class Jijianjianchabao(BaseFeedBook):
                 #r = .find({'class':'title01'})
                 #if r is not None:
                 #    desc = self.tag_to_string(r)
-                wz = {'title':til, 'url' : url}
+                wz = {'fTitle':til, 'url' : url}
                 #self.log.warn('href为：%s'%url)
                 articles.append(wz)
 
             ans0 = (vol_title, wz)
 
-            ans.append((vol_title,ans0))
+            ans.append((vol_title,ans0,None))
                 #urladded.add(url)
 
         if len(ans) == 0:
