@@ -6,12 +6,12 @@ import re
 import datetime
 
 def getBook():
-    return Zgjjjcb
+    return Jijianjianchabao
 
 
-class Zgjjjcb(BaseFeedBook):
+class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.3.13'
+    description           =  u'中央纪委监察报机关报纸|ver:0.4.1'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -32,7 +32,7 @@ class Zgjjjcb(BaseFeedBook):
 #    ]})
 #    ]
 
-    def wenzhang_to_soup(self, indexurl):
+    def page_to_soup(self, indexurl):
         wenzhangopener = URLOpener(self.host, timeout=90)
         soupresult = wenzhangopener.open(indexurl)
         if soupresult.status_code != 200:
@@ -48,10 +48,11 @@ class Zgjjjcb(BaseFeedBook):
         # main = 'http://csr.mos.gov.cn/content/1/'
         mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
         #mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' + 'node_2.htm' #头版完整url
-        urls = []
-        urladded = set()
-        opener = URLOpener(self.host, timeout=90)
-        result = opener.open(mainurl + 'node_2.htm')
+        ans = []
+        #urladded = set()
+        # opener = URLOpener(self.host, timeout=90)
+        # result = opener.open(mainurl + 'node_2.htm')
+        result = self.page_to_soup(mainurl)
         if result.status_code != 200:
             self.log.warn('fetch mainnews failed:%s'%mainurl)
 
@@ -61,19 +62,29 @@ class Zgjjjcb(BaseFeedBook):
         #开始解析
         mulu = soup.find('td',{'class':'mulu04'})
         for banmian in mulu.find_all('a'):
-            vol_title = banmian.contents[0].strip()
+            articles = []
             if 'pdf' in banmian['href']:
                 continue
-            wenzhang = self.wenzhang_to_soup(mainurl + banmian['href'])
-            ul = wenzhang.find('ul',{'class':'list01'})#抓取的正文链接框架部分
+            wenzhangliebiao = self.page_to_soup(mainurl + banmian['href'])
+            vol_title = banmian.contents[0].strip()
+            ul = wenzhangliebiao.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
-            for link in ul.findAll('a'):
+            for link in ul.find_all('a'):
                 til = self.string_of_tag(link)
                 url = self.mainurl + link['href']
-                self.log.warn('href为：%s'%url)
-                urls.append((vol_title,til,url,None))
-                urladded.add(url)
+                desc = ''
+                #r = .find({'class':'title01'})
+                #if r is not None:
+                #    desc = self.tag_to_string(r)
+                wz = {'title':til, 'url' : url}
+                #self.log.warn('href为：%s'%url)
+                articles.append(wz)
 
-        if len(urls) == 0:
+            ans0 = (vol_title, wz)
+
+            ans.append((vol_title,ans0))
+                #urladded.add(url)
+
+        if len(ans) == 0:
             self.log.warn('len of urls is zero.')
-        return urls
+        return ans
