@@ -11,7 +11,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.4.4.2'
+    description           =  u'中央纪委监察报机关报纸|ver:0.4.4.3'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -32,6 +32,8 @@ class Jijianjianchabao(BaseFeedBook):
 #    ]})
 #    ]
 
+    mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
+
     def page_to_soup(self, indexurl):
         opener = URLOpener(self.host, timeout=90)
         result = opener.open(indexurl)
@@ -46,13 +48,12 @@ class Jijianjianchabao(BaseFeedBook):
         #return lists like [(section,title,url,desc),..]
         datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
         # main = 'http://csr.mos.gov.cn/content/1/'
-        mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
         #mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' + 'node_2.htm' #头版完整url
         ans = []
         #urladded = set()
         # opener = URLOpener(self.host, timeout=90)
         # result = opener.open(mainurl + 'node_2.htm')
-        soup1 = self.page_to_soup(mainurl + 'node_2.htm')
+        soup1 = self.page_to_soup(self.mainurl + 'node_2.htm')
         #if result.status_code != 200:
         #    self.log.warn('fetch mainnews failed:%s'%mainurl)
 
@@ -65,13 +66,13 @@ class Jijianjianchabao(BaseFeedBook):
             articles = []
             if 'pdf' in banmian['href']:
                 continue
-            wenzhangliebiao = self.page_to_soup(mainurl + banmian['href'])
+            wenzhangliebiao = self.page_to_soup(self.mainurl + banmian['href'])
             vol_title = banmian.contents[0].strip()
             ul = wenzhangliebiao.find('ul',{'class':'list01'})#抓取的正文链接框架部分
 
             for link in ul.find_all('a'):
                 til = string_of_tag(link)
-                url = mainurl + link['href']
+                url = self.mainurl + link['href']
                 desc = ''
                 #r = .find({'class':'title01'})
                 #if r is not None:
