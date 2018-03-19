@@ -11,7 +11,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.4.1'
+    description           =  u'中央纪委监察报机关报纸|ver:0.4.2'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -33,14 +33,14 @@ class Jijianjianchabao(BaseFeedBook):
 #    ]
 
     def page_to_soup(self, indexurl):
-        wenzhangopener = URLOpener(self.host, timeout=90)
-        soupresult = wenzhangopener.open(indexurl)
-        if soupresult.status_code != 200:
+        opener = URLOpener(self.host, timeout=90)
+        result = opener.open(indexurl)
+        if result.status_code != 200:
             self.log.warn('fetch mainnews failed:%s'%indexurl)
 
-        content = soupresult.content.decode(self.page_encoding)
-        wenzhangmulu = BeautifulSoup(content, "lxml")
-        return wenzhangmulu
+        content = result.content.decode(self.feed_encoding)
+        soup = BeautifulSoup(content, "lxml")
+        return soup
 
     def ParseFeedUrls(self):
         #return lists like [(section,title,url,desc),..]
@@ -52,15 +52,15 @@ class Jijianjianchabao(BaseFeedBook):
         #urladded = set()
         # opener = URLOpener(self.host, timeout=90)
         # result = opener.open(mainurl + 'node_2.htm')
-        result = self.page_to_soup(mainurl)
-        if result.status_code != 200:
-            self.log.warn('fetch mainnews failed:%s'%mainurl)
+        soup1 = self.page_to_soup(mainurl)
+        #if result.status_code != 200:
+        #    self.log.warn('fetch mainnews failed:%s'%mainurl)
 
-        content = result.content.decode(self.page_encoding)
-        soup = BeautifulSoup(content, "lxml")
+        # content = result.content.decode(self.page_encoding)
+        # soup = BeautifulSoup(content, "lxml")
 
         #开始解析
-        mulu = soup.find('td',{'class':'mulu04'})
+        mulu = soup1.find('td',{'class':'mulu04'})
         for banmian in mulu.find_all('a'):
             articles = []
             if 'pdf' in banmian['href']:

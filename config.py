@@ -4,8 +4,8 @@
 KindleEar配置文件，请务必修改开始两个配置（如果使用uploader，则uploader自动帮你修改）
 """
 
-SRC_EMAIL = "akindleear@gmail.com"  #Your gmail account for sending mail to Kindle
-DOMAIN = "http://kindleear.appspot.com/" #Your domain of app
+SRC_EMAIL = "dyz3123@gmail.com"  #Your gmail account for sending mail to Kindle
+DOMAIN = "http://dyzkindleear1.appspot.com/" #Your domain of app
 
 TIMEZONE = 8  #Default timezone, you can modify it in webpage after deployed
 
@@ -60,7 +60,7 @@ REDUCE_IMAGE_TO = None #(600,800)
 #clean css in dealing with content from string@appid.appspotmail.com or not
 DELETE_CSS_FOR_APPSPOTMAIL = True
 
-#if word count more than the number, the email received by appspotmail will 
+#if word count more than the number, the email received by appspotmail will
 #be transfered to kindle directly, otherwise, will fetch the webpage for links in email.
 WORDCNT_THRESHOLD_FOR_APMAIL = 100
 
@@ -91,4 +91,3 @@ SHARE_ON_TUMBLR = u"Share on Tumblr"
 OPEN_IN_BROWSER = u"Open in Browser"
 
 POCKET_CONSUMER_KEY = '50188-e221424f1c9ed0c010058aef'
-
