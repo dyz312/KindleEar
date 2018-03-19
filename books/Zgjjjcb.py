@@ -11,7 +11,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.4.2'
+    description           =  u'中央纪委监察报机关报纸|ver:0.4.3'
     language              = 'zh'
     feed_encoding         = "utf-8"
     page_encoding         = "utf-8"
@@ -60,7 +60,7 @@ class Jijianjianchabao(BaseFeedBook):
         # soup = BeautifulSoup(content, "lxml")
 
         #开始解析
-        mulu = soup1.find('td',{'class':'mulu04'})
+        mulu = soup1.find_all('td',{'class':'mulu04'})
         for banmian in mulu.find_all('a'):
             articles = []
             if 'pdf' in banmian['href']:
