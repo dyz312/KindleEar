@@ -11,12 +11,12 @@ def getBook():
     return Jijianjianchabao
 
 def callback(self):
-    img=Image.open(datetime_t).convert('L)
+    img=Image.open(datetime_t).convert('L')
     return img
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.1'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
