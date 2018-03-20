@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 from bs4 import BeautifulSoup
 from base import BaseFeedBook, URLOpener, string_of_tag
-import re
-import datetime
+import re, datetime
+from PIL import Image
 
 datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
 
@@ -16,7 +16,7 @@ def cover():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.3'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.4'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
