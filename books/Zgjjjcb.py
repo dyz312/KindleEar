@@ -5,18 +5,24 @@ from base import BaseFeedBook, URLOpener, string_of_tag
 import re
 import datetime
 
+datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
+
 def getBook():
     return Jijianjianchabao
 
+def callback(self):
+    img=Image.open(datetime_t).convert('L)
+    return img
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.4.5'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1'
     language              = 'zh'
-    feed_encoding         = "utf-8"
-    page_encoding         = "utf-8"
-    mastheadfile          = "mh_economist.gif"
-    coverfile             = "cv_zgjjjcb.jpg"
+    feed_encoding         = 'utf-8'
+    page_encoding         = 'utf-8'
+    mastheadfile          = 'cv_zgjjjcb.jpg'
+    #coverfile             = "cv_zgjjjcb.jpg"
+    coverfile             =  callback(instan)
     oldest_article        = 1
     # fulltext_by_readability = False
     # keep_image            =  True
@@ -44,7 +50,6 @@ class Jijianjianchabao(BaseFeedBook):
 
     def ParseFeedUrls(self):
         #return lists like [(section,title,url,desc),..]
-        datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
         # main = 'http://csr.mos.gov.cn/content/1/'
         mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
         #mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' + 'node_2.htm' #头版完整url
