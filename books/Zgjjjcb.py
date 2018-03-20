@@ -16,13 +16,13 @@ def callback(self):
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.1'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.2'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
     mastheadfile          = 'cv_zgjjjcb.jpg'
     #coverfile             = "cv_zgjjjcb.jpg"
-    coverfile             =  callback(instan)
+    coverfile             =  callback(self)
     oldest_article        = 1
     # fulltext_by_readability = False
     # keep_image            =  True
