@@ -14,7 +14,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.10'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.11'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
@@ -25,7 +25,7 @@ class Jijianjianchabao(BaseFeedBook):
 
     #coverfile             =  self.callback()
     oldest_article        = 1
-    # fulltext_by_readability = False
+    fulltext_by_readability = True
     keep_image            =  True
     extra_css      = '''
         p { font-size: 1em; font-weight: 600;  text-align: justify;  line-height: 1.5 }
