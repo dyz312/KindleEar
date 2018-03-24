@@ -14,7 +14,7 @@ def getBook():
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.8'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.9'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
@@ -38,7 +38,6 @@ class Jijianjianchabao(BaseFeedBook):
 #            'pblsh'
 #    ]})
 #    ]
-    datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
 
     def page_to_soup(self, indexurl):
         opener = URLOpener(self.host, timeout=90)
@@ -51,6 +50,7 @@ class Jijianjianchabao(BaseFeedBook):
         return soup
 
     def ParseFeedUrls(self):
+        datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返回一个['2017', '10', '09']形式的列表
         #return lists like [(section,title,url,desc),..]
         # main = 'http://csr.mos.gov.cn/content/1/'
         mainurl = 'http://csr.mos.gov.cn/content/' + datetime_t[0] + '-' + datetime_t[1] + '/' + datetime_t[2] + '/' #url前缀带日期
