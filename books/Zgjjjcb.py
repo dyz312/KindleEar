@@ -10,25 +10,25 @@ datetime_t = str(datetime.date.today()).split('-')  #对日期进行拆分，返
 def getBook():
     return Jijianjianchabao
 
-def cover():
-    img=Image.open(datetime_t + '1_brief.jpg').convert('L')
-    return img
+#def cover():
+#    img=Image.open(datetime_t + '1_brief.jpg').convert('L')
+#    return img
 
 class Jijianjianchabao(BaseFeedBook):
     title                 =  u'中国纪检监察报'
-    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.6'
+    description           =  u'中央纪委监察报机关报纸|ver:0.5.1.7'
     language              = 'zh'
     feed_encoding         = 'utf-8'
     page_encoding         = 'utf-8'
     mastheadfile          = 'cv_zgjjjcb.jpg'
     #coverfile             = "cv_zgjjjcb.jpg"
-    coverfile = cover()
+    #coverfile = cover()
         #coverfile = cover(Jijianjianchabao)
 
     #coverfile             =  self.callback()
     oldest_article        = 1
-    # fulltext_by_readability = False
-    # keep_image            =  True
+    fulltext_by_readability = False
+    keep_image            =  True
     extra_css      = '''
         p { font-size: 1em; font-weight: 600;  text-align: justify;  line-height: 1.5 }
         h1 { font-size: large  }
